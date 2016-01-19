@@ -1,0 +1,21 @@
+---
+driver:
+  name: docker
+driver_config:
+  require_chef_omnibus: true
+  use_sudo: false
+  privileged: true #required for elasticsearch init script to complete successfully
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-6.4
+
+dns:
+  - 8.8.8.8
+  - 8.8.4.4
+
+suites:
+  - name: default
+    run_list: ['ectg-opt::default']
