@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: ectg-opt
+# Cookbook Name:: mwser-opt
 # Recipe:: default
 #
 # Copyright (C) 2015 UC Regents
@@ -24,7 +24,7 @@ require 'chef-vault'
 package 'git'
 
 unless node['fqdn'] == 'onlinepoll.ucla.edu'
-  fqdn = 'stage.onlinepoll.ucla.edu'
+  fqdn = 'staging.onlinepoll.ucla.edu'
   app_name = 'staging'
   app_revision = 'master'
   rails_env = 'staging'

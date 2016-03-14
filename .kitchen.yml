@@ -18,4 +18,4 @@ dns:
 
 suites:
   - name: default
-    run_list: ['ectg-opt::default']
+    run_list: ['mwser-opt::default']

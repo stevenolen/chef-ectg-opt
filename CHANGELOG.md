@@ -1,3 +1,3 @@
 # 0.1.0
 
-Initial release of ectg-opt
+Initial release of mwser-opt
