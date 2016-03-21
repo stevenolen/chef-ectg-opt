@@ -27,10 +27,11 @@ case node['fqdn']
 when 'onlinepoll.ucla.edu'
   fqdn = 'onlinepoll.ucla.edu'
   app_name = 'prod'
-  app_revision = '2.0.31'
+  app_revision = '2.0.32'
   rails_env = 'production'
   port = 3000
-  bridge_enabled = false
+  bridge_enabled = true
+  shib_client = 'opt'
 when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   fqdn = 'staging.onlinepoll.ucla.edu'
   app_name = 'staging'
@@ -38,6 +39,7 @@ when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   rails_env = 'staging'
   port = 3002
   bridge_enabled = false
+  shib_client = 'staging_opt'
 end
 
 # install mysql
@@ -126,6 +128,7 @@ rbenv_global '2.2.3'
 rbenv_gem 'bundle'
 
 opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef-vault
+bridge_secrets = ChefVault::Item.load('secrets', 'oauth2') # gets bridge secret from vault.
 
 # set up opt!
 opt app_name do
@@ -136,5 +139,8 @@ opt app_name do
   bundler_path '/usr/local/rbenv/shims'
   rails_env rails_env
   deploy_key opt_deploy_key['private']
+  shib_client_name shib_client
+  shib_secret bridge_secrets[shib_client]
+  shib_site 'https://onlinepoll.ucla.edu'
   # assumes es_host is localhost!
 end
