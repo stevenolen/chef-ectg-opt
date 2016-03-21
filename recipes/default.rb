@@ -23,12 +23,21 @@ require 'chef-vault'
 # some basic package deps. only tested on rhel family.
 package 'git'
 
-unless node['fqdn'] == 'onlinepoll.ucla.edu'
+case node['fqdn']
+when 'onlinepoll.ucla.edu'
+  fqdn = 'onlinepoll.ucla.edu'
+  app_name = 'prod'
+  app_revision = '2.0.31'
+  rails_env = 'production'
+  port = 3000
+  bridge_enabled = false
+when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   fqdn = 'staging.onlinepoll.ucla.edu'
   app_name = 'staging'
   app_revision = 'master'
   rails_env = 'staging'
   port = 3002
+  bridge_enabled = false
 end
 
 # install mysql
@@ -98,9 +107,9 @@ template '/etc/nginx/sites-available/opt' do
   variables(
     app_name: app_name,
     fqdn: fqdn,
-    port: 3002,
+    port: port,
     path: '/var/www/', # not used.
-    # bridge_enabled: bridge_enabled
+    bridge_enabled: bridge_enabled
   )
   notifies :reload, 'service[nginx]', :delayed
 end
@@ -121,7 +130,7 @@ opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef
 # set up opt!
 opt app_name do
   revision app_revision
-  port 3002
+  port port
   db_password db_opt
   deploy_path '/var/opt'
   bundler_path '/usr/local/rbenv/shims'
