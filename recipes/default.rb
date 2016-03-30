@@ -129,6 +129,7 @@ rbenv_gem 'bundle'
 
 opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef-vault
 bridge_secrets = ChefVault::Item.load('secrets', 'oauth2') # gets bridge secret from vault.
+rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 
 # set up opt!
 opt app_name do
@@ -142,5 +143,6 @@ opt app_name do
   shib_client_name shib_client
   shib_secret bridge_secrets[shib_client]
   shib_site 'https://onlinepoll.ucla.edu'
+  secret rails_secrets[fqdn]
   # assumes es_host is localhost!
 end
