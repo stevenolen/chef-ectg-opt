@@ -124,20 +124,20 @@ end
 
 # nginx conf for subdomain hosts
 subdomains.each do |subdomain|
-  template '/etc/nginx/sites-available/opt-' + subdomain  do
+  template "/etc/nginx/sites-available/opt-#{subdomain}"  do
     source 'opt.conf.erb'
     mode '0775'
     action :create
     variables(
-        app_name: app_name + '-' + subdomain,
-        fqdn: subdomain + '.' + fqdn,
+        app_name: "#{app_name}_#{subdomain}",
+        fqdn: "#{subdomain}.#{fqdn}",
         port: port,
         path: '/var/www/', # not used.
-        bridge_enabled: bridge_enabled
+        bridge_enabled: false
     )
     notifies :reload, 'service[nginx]', :delayed
   end
-  nginx_site 'opt' + '-' + subdomain do
+  nginx_site "opt-#{subdomain}" do
     action :enable
   end
 end
