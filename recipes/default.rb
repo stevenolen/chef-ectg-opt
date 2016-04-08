@@ -42,6 +42,8 @@ when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   shib_client = 'staging_opt'
 end
 
+subdomains = ['generic']
+
 # install mysql
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
 db_root = db_root_obj[node['fqdn']]
@@ -85,6 +87,7 @@ directory '/etc/ssl/private' do
 end
 
 # add SSL certs to box
+# TODO - once SSL certificates are obtained for the "generic" hosts, add the SSL blocks for them
 ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl cert from chef-vault
 file "/etc/ssl/certs/#{fqdn}.crt" do
   owner 'root'
@@ -117,6 +120,26 @@ template '/etc/nginx/sites-available/opt' do
 end
 nginx_site 'opt' do
   action :enable
+end
+
+# nginx conf for subdomain hosts
+subdomains.each do |subdomain|
+  template '/etc/nginx/sites-available/opt-' + subdomain  do
+    source 'opt.conf.erb'
+    mode '0775'
+    action :create
+    variables(
+        app_name: app_name + '-' + subdomain,
+        fqdn: subdomain + '.' + fqdn,
+        port: port,
+        path: '/var/www/', # not used.
+        bridge_enabled: bridge_enabled
+    )
+    notifies :reload, 'service[nginx]', :delayed
+  end
+  nginx_site 'opt' + '-' + subdomain do
+    action :enable
+  end
 end
 
 # install ruby with rbenv, npm, git
