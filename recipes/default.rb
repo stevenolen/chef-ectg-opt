@@ -87,7 +87,6 @@ directory '/etc/ssl/private' do
 end
 
 # add SSL certs to box
-# TODO - once SSL certificates are obtained for the "generic" hosts, add the SSL blocks for them
 ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl cert from chef-vault
 file "/etc/ssl/certs/#{fqdn}.crt" do
   owner 'root'
@@ -122,7 +121,7 @@ nginx_site 'opt' do
   action :enable
 end
 
-# nginx conf for subdomain hosts
+# nginx and SSL conf for custom subdomain hosts
 subdomains.each do |subdomain|
   template "/etc/nginx/sites-available/opt-#{subdomain}"  do
     source 'opt.conf.erb'
@@ -135,6 +134,21 @@ subdomains.each do |subdomain|
         path: '/var/www/', # not used.
         bridge_enabled: false
     )
+    notifies :reload, 'service[nginx]', :delayed
+  end
+  ssl_key_cert = ChefVault::Item.load('ssl', "#{subdomain}.#{fqdn}") # gets ssl cert from chef-vault
+  file "/etc/ssl/certs/#{subdomain}.#{fqdn}.crt" do
+    owner 'root'
+    group 'root'
+    mode '0777'
+    content ssl_key_cert['cert']
+    notifies :reload, 'service[nginx]', :delayed
+  end
+  file "/etc/ssl/private/#{subdomain}.#{fqdn}.key" do
+    owner 'root'
+    group 'root'
+    mode '0600'
+    content ssl_key_cert['key']
     notifies :reload, 'service[nginx]', :delayed
   end
   nginx_site "opt-#{subdomain}" do
