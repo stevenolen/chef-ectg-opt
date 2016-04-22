@@ -136,23 +136,25 @@ subdomains.each do |subdomain|
     )
     notifies :reload, 'service[nginx]', :delayed
   end
-  ssl_key_cert = ChefVault::Item.load('ssl', "#{subdomain}.#{fqdn}") # gets ssl cert from chef-vault
-  file "/etc/ssl/certs/#{subdomain}.#{fqdn}.crt" do
-    owner 'root'
-    group 'root'
-    mode '0777'
-    content ssl_key_cert['cert']
-    notifies :reload, 'service[nginx]', :delayed
-  end
-  file "/etc/ssl/private/#{subdomain}.#{fqdn}.key" do
-    owner 'root'
-    group 'root'
-    mode '0600'
-    content ssl_key_cert['key']
-    notifies :reload, 'service[nginx]', :delayed
-  end
-  nginx_site "opt-#{subdomain}" do
-    action :enable
+  unless fqdn == 'onlinepoll.ucla.edu'
+    ssl_key_cert = ChefVault::Item.load('ssl', "#{subdomain}.#{fqdn}") # gets ssl cert from chef-vault
+    file "/etc/ssl/certs/#{subdomain}.#{fqdn}.crt" do
+      owner 'root'
+      group 'root'
+      mode '0777'
+      content ssl_key_cert['cert']
+      notifies :reload, 'service[nginx]', :delayed
+    end
+    file "/etc/ssl/private/#{subdomain}.#{fqdn}.key" do
+      owner 'root'
+      group 'root'
+      mode '0600'
+      content ssl_key_cert['key']
+      notifies :reload, 'service[nginx]', :delayed
+    end
+    nginx_site "opt-#{subdomain}" do
+      action :enable
+    end
   end
 end
 
