@@ -4,7 +4,7 @@ maintainer_email 'technolengy@gmail.com'
 license 'Apache 2.0'
 description 'Installs/Configures mwser-opt'
 long_description 'Installs/Configures mwser-opt'
-version '0.2.22'
+version '0.2.23'
 
 depends 'opt'
 depends 'mysql'
