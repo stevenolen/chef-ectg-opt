@@ -168,6 +168,7 @@ opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef
 bridge_secrets = ChefVault::Item.load('secrets', 'oauth2') # gets bridge secret from vault.
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 recaptcha_secrets = ChefVault::Item.load('recaptcha_secrets', fqdn)
+smtp_settings = ChefVault::Item.load('smtp', fqdn)
 
 # set up opt!
 opt app_name do
@@ -184,5 +185,8 @@ opt app_name do
   secret rails_secrets[fqdn]
   recaptcha_public_key recaptcha_secrets['public']
   recaptcha_private_key recaptcha_secrets['private']
+  smtp_host smtp_settings['host']
+  smtp_username smtp_settings['username']
+  smtp_password smtp_settings['password']
   # assumes es_host is localhost!
 end
