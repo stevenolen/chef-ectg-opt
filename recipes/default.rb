@@ -40,6 +40,15 @@ when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   port = 3002
   bridge_enabled = false
   shib_client = 'staging_opt'
+when 'test.onlinepoll.ucla.edu' # staging.onlinepoll.ucla.edu
+  fqdn = 'test.onlinepoll.ucla.edu'
+  app_name = 'test'
+  app_revision = 'master'
+  rails_env = 'staging'
+  repo = 'git@github.com:mutaron/opt'
+  port = 3002
+  bridge_enabled = false
+  shib_client = 'test_opt'
 end
 
 subdomains = ['generic']
