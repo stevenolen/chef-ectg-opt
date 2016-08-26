@@ -51,7 +51,7 @@ when 'test.onlinepoll.ucla.edu' # staging.onlinepoll.ucla.edu
   shib_client = 'test_opt'
 end
 
-subdomains = ['generic']
+subdomains = ['generic', 'ucr']
 
 # install mysql
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
