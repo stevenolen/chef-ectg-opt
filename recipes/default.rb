@@ -175,6 +175,7 @@ rbenv_gem 'bundle'
 
 opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef-vault
 bridge_secrets = ChefVault::Item.load('secrets', 'oauth2') # gets bridge secret from vault.
+esb_secrets = ChefVault::Item.load('secrets', 'esb') # gets ESB secret from vault.
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 recaptcha_secrets = ChefVault::Item.load('recaptcha_secrets', fqdn)
 smtp_settings = ChefVault::Item.load('smtp', fqdn)
@@ -191,6 +192,11 @@ opt app_name do
   shib_client_name shib_client
   shib_secret bridge_secrets[shib_client]
   shib_site 'https://onlinepoll.ucla.edu'
+  esb_user esb_secrets["#{app_name}_user"]
+  esb_pass esb_secrets["#{app_name}_pass"]
+  esb_auth_url esb_secrets["#{app_name}_auth_url"]
+  esb_cert esb_secrets["#{app_name}_cert"]
+  esb_key esb_secrets["#{app_name}_key"]
   secret rails_secrets[fqdn]
   recaptcha_public_key recaptcha_secrets['public']
   recaptcha_private_key recaptcha_secrets['private']
