@@ -192,11 +192,11 @@ opt app_name do
   shib_client_name shib_client
   shib_secret bridge_secrets[shib_client]
   shib_site 'https://onlinepoll.ucla.edu'
-  esb_user ''
-  esb_pass ''
-  esb_auth_url ''
-  esb_cert ''
-  esb_key ''
+  esb_user 'change'
+  esb_pass 'change'
+  esb_auth_url 'change'
+  esb_cert 'change'
+  esb_key 'change'
   #esb_user esb_secrets["#{app_name}_user"]
   #esb_pass esb_secrets["#{app_name}_pass"]
   #esb_auth_url esb_secrets["#{app_name}_auth_url"]
