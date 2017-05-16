@@ -15,6 +15,7 @@ server {
   server_name <%= @fqdn %>;
   listen 443;
   ssl on;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_certificate /etc/ssl/certs/<%= @fqdn %>.crt;
   ssl_certificate_key /etc/ssl/private/<%= @fqdn %>.key;
   root <%= @path %>;
