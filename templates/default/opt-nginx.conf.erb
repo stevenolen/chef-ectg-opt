@@ -6,8 +6,6 @@ worker_processes  2;
 error_log  /var/log/nginx/error.log;
 pid        /var/run/nginx.pid;
 
-ssl_dhparam /etc/nginx/dhparams.pem;
-
 events {
   worker_connections  1024;
 }
@@ -44,6 +42,8 @@ http {
   types_hash_max_size 2048;
   types_hash_bucket_size 64;
 
+
+  ssl_dhparam /etc/nginx/dhparams.pem;
 
 
   include /etc/nginx/conf.d/*.conf;
