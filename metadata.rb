@@ -6,6 +6,7 @@ description 'Installs/Configures mwser-opt'
 long_description 'Installs/Configures mwser-opt'
 version '0.2.54'
 
+
 depends 'opt'
 depends 'mysql'
 depends 'ruby_rbenv'
