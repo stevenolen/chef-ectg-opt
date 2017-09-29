@@ -166,7 +166,12 @@ subdomains.each do |subdomain|
 end
 
 # For using strong DH group to prevent Logjam attack
-execute "openssl dhparam -out /etc/nginx/dhparams.pem 2048"
+execute "openssl-dhparam" do
+  command "openssl dhparam -out /etc/nginx/dhparams.pem 2048"
+  ignore_failure true
+  not_if { ::File.exist?('/etc/nginx/dhparams.pem') }
+end
+
 #add "ssl_dhparam /etc/nginx/dhparams.pem;" to "/etc/nginx/nginx.conf"
 template '/etc/nginx/nginx.conf' do
   source 'opt-nginx.conf.erb'
