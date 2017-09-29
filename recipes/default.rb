@@ -27,7 +27,7 @@ case node['fqdn']
 when 'onlinepoll.ucla.edu'
   fqdn = 'onlinepoll.ucla.edu'
   app_name = 'prod'
-  app_revision = '2.0.52'
+  app_revision = '2.0.53'
   rails_env = 'production'
   port = 3000
   bridge_enabled = true
@@ -168,7 +168,6 @@ end
 # For using strong DH group to prevent Logjam attack
 execute "openssl-dhparam" do
   command "openssl dhparam -out /etc/nginx/dhparams.pem 2048"
-  ignore_failure true
   not_if { ::File.exist?('/etc/nginx/dhparams.pem') }
 end
 
