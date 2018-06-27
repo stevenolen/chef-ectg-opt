@@ -35,7 +35,7 @@ when 'onlinepoll.ucla.edu'
 when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   fqdn = 'staging.onlinepoll.ucla.edu'
   app_name = 'staging'
-  app_revision = 'release'
+  app_revision = 'master'
   rails_env = 'staging'
   port = 3002
   bridge_enabled = false
