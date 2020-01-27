@@ -27,7 +27,7 @@ case node['fqdn']
 when 'onlinepoll.ucla.edu'
   fqdn = 'onlinepoll.ucla.edu'
   app_name = 'prod'
-  app_revision = '2.3.3'
+  app_revision = '2.4.0'
   rails_env = 'production'
   port = 3000
   bridge_enabled = true
