@@ -4,7 +4,7 @@ maintainer_email 'EdSakabu@ucla.edu'
 license 'Apache 2.0'
 description 'Installs/Configures mwser-opt'
 long_description 'Installs/Configures mwser-opt'
-version '2.4.2'
+version '2.4.3'
 
 
 depends 'opt'
