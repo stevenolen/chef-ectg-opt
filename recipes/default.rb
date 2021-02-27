@@ -27,11 +27,11 @@ case node['fqdn']
 when 'onlinepoll.ucla.edu'
   fqdn = 'onlinepoll.ucla.edu'
   app_name = 'prod'
-  app_revision = '2.5'
+  app_revision = '2.6.1'
   rails_env = 'production'
   port = 3000
   bridge_enabled = true
-  shib_client = 'opt'
+  keycloak_site = 'https://bivrost.oit.ucla.edu'
 when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   fqdn = 'staging.onlinepoll.ucla.edu'
   app_name = 'staging'
@@ -39,16 +39,7 @@ when 'staging.m.ucla.edu' # staging.onlinepoll.ucla.edu
   rails_env = 'staging'
   port = 3002
   bridge_enabled = false
-  shib_client = 'staging_opt'
-when 'test.onlinepoll.ucla.edu' # staging.onlinepoll.ucla.edu
-  fqdn = 'test.onlinepoll.ucla.edu'
-  app_name = 'test'
-  app_revision = 'master'
-  rails_env = 'staging'
-  repo = 'git@github.com:mutaron/opt'
-  port = 3002
-  bridge_enabled = false
-  shib_client = 'test_opt'
+  keycloak_site = 'https://staging.bivrost.oit.ucla.edu'
 end
 
 subdomains = ['generic'] # removed ucr
@@ -186,11 +177,11 @@ end
 
 
 # install ruby with rbenv, npm, git
-node.default['rbenv']['rubies'] = ['2.2.3']
+node.default['rbenv']['rubies'] = ['2.4.0']
 include_recipe 'ruby_build'
 include_recipe 'ruby_rbenv::system'
 include_recipe 'nodejs::npm'
-rbenv_global '2.2.3'
+rbenv_global '2.4.0'
 rbenv_gem 'bundle'
 
 opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef-vault
@@ -209,9 +200,7 @@ opt app_name do
   bundler_path '/usr/local/rbenv/shims'
   rails_env rails_env
   deploy_key opt_deploy_key['private']
-  shib_client_name shib_client
-  shib_secret bridge_secrets[shib_client]
-  shib_site 'https://onlinepoll.ucla.edu'
+  keycloak_site keycloak_site
   esb_user esb_secrets["#{app_name}_user"]
   esb_pass esb_secrets["#{app_name}_pass"]
   esb_auth_url esb_secrets["#{app_name}_auth_url"]
