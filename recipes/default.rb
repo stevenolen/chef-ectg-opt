@@ -184,9 +184,9 @@ include_recipe 'nodejs::npm'
 rbenv_global '2.4.0'
 rbenv_gem 'bundle'
 
-opt_deploy_key = ChefVault::Item.load('deploy', 'opt') # gets ssl cert from chef-vault
-bridge_secrets = ChefVault::Item.load('secrets', 'oauth2') # gets bridge secret from vault.
-esb_secrets = ChefVault::Item.load('secrets', 'esb') # gets ESB secret from vault.
+opt_deploy_key = ChefVault::Item.load('deploy', 'opt')
+bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
+registrar_secrets = ChefVault::Item.load('secrets', 'registrar')
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 recaptcha_secrets = ChefVault::Item.load('recaptcha_secrets', fqdn)
 smtp_settings = ChefVault::Item.load('smtp', fqdn)
@@ -201,11 +201,10 @@ opt app_name do
   rails_env rails_env
   deploy_key opt_deploy_key['private']
   keycloak_site keycloak_site
-  esb_user esb_secrets["#{app_name}_user"]
-  esb_pass esb_secrets["#{app_name}_pass"]
-  esb_auth_url esb_secrets["#{app_name}_auth_url"]
-  esb_cert esb_secrets["#{app_name}_cert"]
-  esb_key esb_secrets["#{app_name}_key"]
+  registrar_auth_url registrar_secrets["auth_url"]
+  registrar_url_base registrar_secrets["url_base"]
+  registrar_key registrar_secrets["key"]
+  registrar_secret registrar_secrets["secret"]
   secret rails_secrets[fqdn]
   recaptcha_public_key recaptcha_secrets['public']
   recaptcha_private_key recaptcha_secrets['private']
